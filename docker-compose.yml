@@ -1,0 +1,36 @@
+services:
+  backend:
+    build:
+      context: ./django_test
+      dockerfile: Dockerfile
+    ports:
+        - 1111:7777
+    volumes:
+      - ./django_test/:/django-app
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    links:
+      - postgres-db 
+    command: python3 manage.py runserver 0.0.0.0:7777
+
+  postgres-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: abcde  # Replace with a strong password
+      POSTGRES_USER: asergi
+      POSTGRES_DB: postgres_django
+      # POSTGRES_HOST_AUTH_METHOD: trust 
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persistent storage for database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d postgres_django -U asergi"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data: {} # Named volume for database persistence

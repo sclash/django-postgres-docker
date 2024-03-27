@@ -1,0 +1,12 @@
+pyarrow
+django
+django-rest-framework
+django-cors-headers
+pyopenssl
+attrs
+websockets
+python-dotenv
+async-http-requests
+pandas
+sqlalchemy
+psycopg2-binary
