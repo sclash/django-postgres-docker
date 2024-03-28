@@ -7,6 +7,7 @@ Check the `docker-compose.yml` and `settings.py` to understand how.
 - [Building and runnign the Docker containers](#building-and-runnign-the-docker-containers)
     - [Stop and Clear Containers](#stop-and-clear-containers)
 - [Network Availability](#network-availability)
+    - [Connect to docker container on host through DNS](#connect-to-docker-container-on-host-through-dns)
 - [Connect to Postgres](#connect-to-postgres)
     - [Credentials](#credentials)
 
@@ -39,6 +40,22 @@ Both Containers are exposed on the local network at the following ports:
 - Postgres: `<ipv4>:5432` e.g. `http://172.26.25.20:5432`
 
 `NOTE`: the `<ipv4>` address must be listed in the `ALLOWED_HOSTS` in the `settings.py` file. (In this case it set to `'*'` e.g. any host is allowed)
+
+### Connect to docker container on host through DNS
+How can we connect to  a container from host at `service_name:port` insted of using `Ipv4 address` of the container?
+
+modify the `/etc/hosts` with `172.26.35.20 alias`
+modify the `/etc/hosts` with `<Docker-network-address> alias`
+
+To get `<Docker-network-address>` either run `ip addr show` or
+```bash
+sudo docker network ls # to get the network_name
+sudo docker network inspect <network_name> # to get the <Docker-network-address>
+```
+
+- [StackOverflow](https://stackoverflow.com/questions/37242217/access-docker-container-from-host-using-containers-name)
+- [DPS](https://mageddo.github.io/dns-proxy-server/latest/en/)
+- [Change host config](https://www.linkedin.com/pulse/learn-how-access-docker-container-its-name-from-host-renato-rodrigues)
 
 ## Connect to Postgres
 You can connect at the PostgreSQL server using the above address while connectedd to the local network.
